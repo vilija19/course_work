@@ -1,4 +1,5 @@
-<x-guest-layout>
+@extends('layouts.main')
+@section('content')
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
@@ -41,6 +42,9 @@
             </div>
 
             <div class="flex items-center justify-end mt-4">
+                <div class="col-md-4 themed-grid-col">
+                    <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Not registered?</a>
+                </div>                                 
                 @if (Route::has('password.request'))
                     <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
                         {{ __('Forgot your password?') }}
@@ -53,4 +57,4 @@
             </div>
         </form>
     </x-auth-card>
-</x-guest-layout>
+@endsection
