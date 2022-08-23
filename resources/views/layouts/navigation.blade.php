@@ -12,10 +12,30 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                    <x-nav-link :href="route('account.user.show',Auth::user()->id)" :active="request()->routeIs('account.user.show',Auth::user()->id)">
+                        {{ __('User Info') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('account.user.edit',Auth::user()->id)" :active="request()->routeIs('account.user.edit',Auth::user()->id)">
+                        {{ __('Edit Account') }}
+                    </x-nav-link>
+                </div>  
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Settings') }}
+                    </x-nav-link>
+                </div> 
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Bank accounts') }}
+                    </x-nav-link>
+                </div>  
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Transactions') }}
+                    </x-nav-link>
+                </div>                                                              
             </div>
 
             <!-- Settings Dropdown -->
