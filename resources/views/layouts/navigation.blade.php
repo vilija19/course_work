@@ -22,17 +22,17 @@
                     </x-nav-link>
                 </div>  
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('account.user.create')" :active="request()->routeIs('account.user.create')">
                         {{ __('Settings') }}
                     </x-nav-link>
                 </div> 
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('account.wallets.index')" :active="request()->routeIs('account.wallets.index')">
                         {{ __('Bank accounts') }}
                     </x-nav-link>
                 </div>  
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('account.transactions.index')" :active="request()->routeIs('account.transactions.index')">
                         {{ __('Transactions') }}
                     </x-nav-link>
                 </div>                                                              

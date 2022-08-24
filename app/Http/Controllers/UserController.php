@@ -21,13 +21,16 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for choose default currency.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        $data = array();
+        $data['currencies'] = \App\Models\Currency::all();
+        $data['default_currency_id'] = Auth::user()->default_currency_id;
+        return view('account.settings', $data);
     }
 
     /**
@@ -38,7 +41,13 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'currency_id' => 'required|int|max:25'
+        ]);
+        $user = User::find(Auth::user()->id);
+        $user->default_currency_id = $request->currency_id;
+        $user->save();
+        return redirect()->back()->with('message', 'Default currency has been changed');
     }
 
     /**
