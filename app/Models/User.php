@@ -46,4 +46,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Wallet::class);
     }
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class , 'default_currency_id');
+    }
 }

@@ -17,7 +17,6 @@ class WalletController extends Controller
     {
         $data = array();
         $data['wallets'] = User::find(Auth::user()->id)->wallets;
-        $data['currencies'] = \App\Models\Currency::all();
         return view('account.wallets-info', $data);
     }
 
@@ -117,4 +116,5 @@ class WalletController extends Controller
     {
         //
     }
+
 }

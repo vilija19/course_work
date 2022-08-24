@@ -23,7 +23,11 @@
             </thead>
             <tbody>
                 @foreach ($transactions as $transaction)
-                <tr>
+                @if ($transaction->type == config('app.transaction_types')[1])
+                <tr class="table-success">
+                @else
+                <tr class="table-danger">
+                @endif
                 <th scope="row">{{ $transaction->id }}</th>
                 <td>{{ $transaction->wallet->name }}</td>
                 <td>{{ $transaction->amount  }}</td>

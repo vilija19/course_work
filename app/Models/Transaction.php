@@ -19,9 +19,9 @@ class Transaction extends Model
     public function getTypeAttribute($value)
     {
         if ($value == 0) {
-            return 'Debit';
+            return config('app.transaction_types')[0];
         }
-        return 'Credit';
+        return config('app.transaction_types')[1];
     }
 
     public function wallet()
