@@ -48,6 +48,7 @@ class TransactionController extends Controller
             'wallet_id' => 'required|int|max:25',
             'amount' => 'required|numeric|min:1',
             'type' => 'required|int|max:1',
+            'description' => 'string|max:55',
         ]);
         $wallet = Wallet::find($request->wallet_id);
         $transaction = new Transaction();
@@ -86,7 +87,9 @@ class TransactionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = array();
+        $data['transaction'] = Transaction::find($id);
+        return view('account.transaction-edit', $data);
     }
 
     /**
@@ -98,7 +101,18 @@ class TransactionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'amount' => 'required|numeric|min:1',
+            'type' => 'required|int|max:1',
+            'description' => 'string|max:55'
+        ]);
+        $transaction = Transaction::find($id);
+        $transaction->type = $request->type;
+        $transaction->amount = $request->amount;
+        $transaction->description = $request->description;
+        $transaction->save();
+
+        return redirect()->route('account.transactions.index')->with('message', 'Transaction updated successfully');
     }
 
     /**
@@ -109,6 +123,10 @@ class TransactionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $message = '';
+        $transaction = Transaction::find($id);
+        $transaction->delete();
+        $message = 'Transaction '. $transaction->id .' deleted successfully';
+        return redirect()->route('account.transactions.index')->with('message', $message);
     }
 }

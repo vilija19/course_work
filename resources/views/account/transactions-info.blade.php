@@ -36,6 +36,11 @@
                 <td>{{ $transaction->created_at }}</td>
                 <td>
                     <a href="{{ route('account.transactions.edit', $transaction->id) }}" class="btn btn-primary">Edit</a>
+                    <form class="btn btn-danger"  method="POST" action="{{ route('account.transactions.destroy', $transaction->id) }}"  target="_self">
+                        @csrf
+                        @method('DELETE')
+                        <input type="submit" value="Delete">
+                    </form>
                 </td>
                 </tr>
                 @endforeach                 
