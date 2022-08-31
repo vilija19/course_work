@@ -14,7 +14,7 @@
                 <tr>
                 <th scope="col">#</th>
                 <th scope="col">Wallet</th>
-                <th scope="col">Amount</th>
+                <th scope="col">Amount ({{$default_currency_code}})</th>
                 <th scope="col">Type</th>
                 <th scope="col">Description</th>
                 <th scope="col">Date</th>
@@ -30,7 +30,7 @@
                 @endif
                 <th scope="row">{{ $transaction->id }}</th>
                 <td>{{ $transaction->wallet->name }}</td>
-                <td>{{ $transaction->amount  }}</td>
+                <td>{{ number_format($transaction->getAmountInDeaultCurrency(),2) }}</td>
                 <td>{{ $transaction->type }}</td>
                 <td>{{ $transaction->description }}</td>
                 <td>{{ $transaction->created_at }}</td>

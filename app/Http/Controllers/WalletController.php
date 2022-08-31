@@ -19,7 +19,9 @@ class WalletController extends Controller
     public function index()
     {
         $data = array();
-        $data['wallets'] = User::find(Auth::user()->id)->wallets;
+        $user = Auth::user();
+        $data['wallets'] = $user->wallets;
+        $test = $this->getExcangeRates($user->default_currency_id);
         return view('account.wallets-info', $data);
     }
 
@@ -122,6 +124,50 @@ class WalletController extends Controller
         $wallet->delete();
         $message = 'Wallet "'.$wallet->name.'" has been deleted';
         return redirect()->route('account.wallets.index')->with('message', $message);
+    }
+
+    /**
+     * Method gets currencies exchange rates for base currency from https://apilayer.com/ and stores them in database
+     * use GUZZLE|GuzzleHttp\Client;
+     */
+    private function getExcangeRates($currency_id)
+    {
+        $baseCurrency = Currency::find($currency_id);
+        $baseCurrency->value = 1;
+        $baseCurrency->save();
+
+        $currencies = Currency::all();
+        if ($currencies->count() < 2) {
+            return;
+        }
+        $currenciesToUpdate = array();
+        foreach ($currencies as $currency) {
+            if ($currency->id != $baseCurrency->id) {
+                $currenciesToUpdate[] = $currency->code;
+            }
+        }
+        $currenciesToUpdateString = implode(',', $currenciesToUpdate);
+
+        $client = new \GuzzleHttp\Client();
+        $res = $client->request('GET', 'https://api.apilayer.com/exchangerates_data/latest', [
+            'query' => [
+                'apikey' => env('API_LAYER_KEY'),
+                'base' => $baseCurrency->code,
+                'symbols' => $currenciesToUpdateString
+            ]
+        ]);
+        $data = json_decode($res->getBody(), true);
+
+        if ($data['success'] === false) {
+            return;
+        }
+
+        foreach ($currencies as $currency) {
+            if ($currency->id != $baseCurrency->id) {
+                $currency->value = $data['rates'][$currency->code];
+                $currency->save();
+            }
+        }
     }
 
 }

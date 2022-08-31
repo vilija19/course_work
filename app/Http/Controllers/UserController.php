@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -60,6 +61,8 @@ class UserController extends Controller
     {
         $data = array();
         $data['user'] = User::find($id);
+
+        $data['total_balance'] = number_format(Wallet::getTotalBalance($data['user']), 2, '.', ',');
         return view('account.user-info', $data);
     }
 
@@ -117,4 +120,5 @@ class UserController extends Controller
     {
         //
     }
+
 }

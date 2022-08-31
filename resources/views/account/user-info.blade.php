@@ -22,7 +22,7 @@
             </div> 
             <div class="row">
                 <div class="col-sm-2">Total balance</div>
-                <div class="col-sm-8">{{ $user->wallets()->sum('balance') }}</div>
+                <div class="col-sm-8">{{ $total_balance }}</div>
             </div>                                   
         </div>
     </div>
@@ -48,7 +48,7 @@
                     <th scope="row">{{ $wallet->id }}</th>
                     <td>{{ $wallet->name }}</td>
                     <td>{{ $wallet->currency->name  }}</td>
-                    <td>{{ $wallet->balance }}</td>
+                    <td>{{ $wallet->getBalance() }}</td>
                     </tr>
                     @endforeach                 
                 </tbody>

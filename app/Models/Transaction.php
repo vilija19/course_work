@@ -31,10 +31,15 @@ class Transaction extends Model
             return config('app.transaction_types')[0];
         }
         return config('app.transaction_types')[1];
-    }
+    }   
 
     public function wallet()
     {
         return $this->belongsTo(Wallet::class);
     }
+
+    public function getAmountInDeaultCurrency()
+    {
+        return Currency::convert2BaseCurrency($this->amount, $this->wallet->currency_id) ?? $this->amount;
+    }    
 }

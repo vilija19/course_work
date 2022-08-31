@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Currency;
 use App\Models\Transaction;
-use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +20,7 @@ class TransactionController extends Controller
         $data = array();
         $data['transactions'] = Transaction::all()->sortByDesc('created_at');
         $data['currencies'] = Currency::all();
+        $data['default_currency_code'] = Currency::find(Auth::user()->default_currency_id)->code ;
         return view('account.transactions-info', $data);
     }
 
@@ -129,4 +129,5 @@ class TransactionController extends Controller
         $message = 'Transaction '. $transaction->id .' deleted successfully';
         return redirect()->route('account.transactions.index')->with('message', $message);
     }
+
 }

@@ -14,7 +14,7 @@ class AlterUserTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('default_currency_id')->nullable()->after('remember_token');
+            $table->integer('default_currency_id')->default(1)->after('remember_token');
         });
     }
 
