@@ -15,12 +15,12 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">{{ __('Balance') }}</label>
-                <input name="balance" type="text" class="form-control" value="{{ old('balance') }}" placeholder="walletbalance">
+                <input name="balance" type="text" class="form-control" value="{{ old('balance') ?? 0 }}" placeholder="walletbalance, zerro by default">
             </div>           
             <div class="mb-3">
                 <label class="form-label">{{__('Currency')}}</label>
                 <select class="form-select" name="currency_id" aria-label="Default select example">
-                    <option selected>Open this select menu</option>
+                    <option selected>Please, choose a currency for wallet</option>
                     @foreach ($currencies as $currency)
                         <option value="{{$currency->id}}">{{$currency->name}}</option>
                     @endforeach

@@ -27,7 +27,20 @@
                 <td>{{ $wallet->currency->name  }}</td>
                 <td>{{ $wallet->balance }}</td>
                 <td>
-                    <a href="{{ route('account.wallets.edit', $wallet->id) }}" class="btn btn-primary">Edit</a>
+                    <div>
+                        <div style="float: left;margin-left: 5px;">
+                            <a href="{{ route('account.wallets.edit', $wallet->id) }}" class="btn btn-primary">Edit</a>
+                        </div>
+                        @if ($wallet->transactions->count() == 0)
+                            <div style="float: left;margin-left: 5px;">
+                                <form class="btn btn-danger"  method="POST" action="{{ route('account.wallets.destroy', $wallet->id) }}"  target="_self">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="submit" value="Delete">
+                                </form>
+                            </div>
+                        @endif
+                    </div>
                 </td>
                 </tr>
                 @endforeach                 

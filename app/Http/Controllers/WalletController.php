@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Currency;
+use App\Models\Transaction;
 use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,7 +31,7 @@ class WalletController extends Controller
     public function create()
     {
         $data = array();
-        $data['currencies'] = \App\Models\Currency::all();
+        $data['currencies'] = Currency::all();
         return view('account.wallet-create', $data);
     }
 
@@ -46,7 +49,7 @@ class WalletController extends Controller
             'balance' => 'numeric|min:0',
         ]);
         $user = User::find(Auth::user()->id);
-        $wallet = new \App\Models\Wallet();
+        $wallet = new Wallet();
         $wallet->name = $request->name;
         $wallet->currency_id = $request->currency_id;
         $wallet->user_id = $user->id;
@@ -54,7 +57,7 @@ class WalletController extends Controller
         if ($request->balance > 0) {
             $wallet->balance = $request->balance;
             $wallet->save();
-            $transaction = new \App\Models\Transaction();
+            $transaction = new Transaction();
             $transaction->type = 1;
             $transaction->amount = $request->balance;
             $transaction->wallet_id = $wallet->id;
@@ -84,7 +87,7 @@ class WalletController extends Controller
     public function edit($id)
     {
         $data = array();
-        $data['wallet'] = \App\Models\Wallet::find($id);
+        $data['wallet'] = Wallet::find($id);
         return view('account.wallet-edit', $data);
     }
 
@@ -100,7 +103,7 @@ class WalletController extends Controller
         $request->validate([
             'name' => 'required|string|max:25'
         ]);
-        $wallet = \App\Models\Wallet::find($id);
+        $wallet = Wallet::find($id);
         $wallet->name = $request->name;
         $wallet->save();
         return redirect()->route('account.wallets.index')->with('message', 'Wallet "'.$wallet->name.'" has been updated');
@@ -114,7 +117,11 @@ class WalletController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $message = '';
+        $wallet = Wallet::find($id);
+        $wallet->delete();
+        $message = 'Wallet "'.$wallet->name.'" has been deleted';
+        return redirect()->route('account.wallets.index')->with('message', $message);
     }
 
 }
