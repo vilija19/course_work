@@ -18,7 +18,7 @@ class TransactionController extends Controller
     public function index()
     {
         $data = array();
-        $data['transactions'] = Transaction::all()->sortByDesc('created_at');
+        $data['transactions'] = Transaction::orderBy('created_at','DESC')->paginate(config('app.items_per_page'));
         $data['currencies'] = Currency::all();
         $data['default_currency_code'] = Currency::find(Auth::user()->default_currency_id)->code ;
         return view('account.transactions-info', $data);

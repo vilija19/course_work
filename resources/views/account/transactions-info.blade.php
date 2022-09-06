@@ -46,6 +46,10 @@
                 @endforeach                 
             </tbody>
         </table> 
+        @if ($transactions->hasPages())
+            <h5>Pagination:</h5>
+            {{ $transactions->links() }}
+        @endif
 
         <a class="btn btn-primary" href="{{route('account.transactions.create')}}" role="button">Create new Transaction</a>                               
 

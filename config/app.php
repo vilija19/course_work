@@ -235,6 +235,6 @@ return [
     'transaction_types' => [
         '0' => 'Withdraw',
         '1' => 'Deposit'
-    ]
-
+    ],
+    'items_per_page' => 4,
 ];
