@@ -18,6 +18,19 @@ class TransactionController extends Controller
     public function index(Request $request)
     {
         $data = array();
+
+        $data['sorts'] = array(
+            'id' => 'ID',
+            'wallet_id' => 'Wallet',
+            'amount' => 'Amount',
+            'type' => 'Type',
+            'description' => 'Description',
+            'created_at' => 'Date',
+        );
+        $data['orders'] = array(
+            'ASC' => 'Ascending',
+            'DESC' => 'Descending',
+        );
         $query = Transaction::query();
         $data['wallet_id_filter'] = null;
         if ($request->has('wallet')) {
@@ -29,7 +42,23 @@ class TransactionController extends Controller
             $query->where('type', (int)$request->get('type'));
             $data['type_filter'] = (int)$request->get('type');
         }
-        $query->orderBy('created_at','DESC');
+
+        $data['sort_id_filter'] = null;
+        if ($request->has('sort')) {
+            $data['sort_id_filter'] = $request->get('sort');
+        }else {
+            $data['sort_id_filter'] = 'created_at';
+        }
+
+        $data['order_id_filter'] = null;
+        if ($request->has('order')) {
+            $data['order_id_filter'] = $request->get('order');
+        }else {
+            $data['order_id_filter'] = 'DESC';
+        }
+
+        $query->orderBy($data['sort_id_filter'],$data['order_id_filter']);
+
         $data['transactions'] = $query->paginate(config('app.items_per_page'));
 
         $data['currencies'] = Currency::all();

@@ -6,8 +6,8 @@
     </x-slot>
 
     <div class="py-4">
-        <div class="max-w-7xl mx-auto sm:px-6 py-4 lg:px-8">
-            <form class="row" action="{{route('account.transactions.index')}}">
+        <div class="max-w-7xl mx-auto  sm:px-6 lg:px-8">
+            <form class="row g-3" action="{{route('account.transactions.index')}}">
                 <div class="col col-lg-2">
                     <label class="form-label">{{__('Filter by Wallet')}}</label>
                     <select class="form-select" name="wallet" aria-label="Default select example">
@@ -26,15 +26,40 @@
                         @endforeach
                     </select>
                 </div> 
-                <div class="col col-lg-1 position-relative">
+                <div class="col col-lg-2 position-relative">
                     <button type="submit" class="btn btn-primary position-absolute bottom-0 start-0">Filter</button>
-                    <a class="btn btn-warning position-absolute bottom-0 start-100" href="{{route('account.transactions.index')}}" role="button">
+                    <a class="btn btn-warning position-absolute bottom-0 end-0" href="{{route('account.transactions.index')}}" role="button">
                         {{__('Reset')}}
                     </a>
                 </div>               
             </form>
-
         </div>
+        <div class="max-w-7xl mx-auto  sm:px-6 py-4 lg:px-8">
+            <form class="row g-2" action="{{route('account.transactions.index')}}">
+                <div class="col col-lg-2">
+                    <label class="form-label">{{__('Sort by:')}}</label>
+                    <select class="form-select" name="sort" aria-label="Default select example">
+                        <option value="" disabled selected hidden>Select sort column</option>
+                        @foreach ( $sorts as  $sort => $sortName)
+                            <option value="{{$sort}}" @if($sort_id_filter === $sort) selected @endif>{{$sortName}}</option>
+                        @endforeach
+                    </select>
+                </div>  
+                <div class="col col-lg-2">
+                    <label class="form-label">{{__('Order:')}}</label>
+                    <select class="form-select" name="order" aria-label="Default select example">
+                        <option value="" disabled selected hidden>Select sort column</option>
+                        @foreach ( $orders as  $order => $orderName)
+                            <option value="{{$order}}" @if($order_id_filter === $order) selected @endif>{{$orderName}}</option>
+                        @endforeach
+                    </select>
+                </div>                              
+                <div class="col col-lg-2 position-relative">
+                    <button type="submit" class="btn btn-primary position-absolute bottom-0 start-0">Sort</button>
+                </div> 
+            </form>
+        </div>
+
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
         <table class="table">
