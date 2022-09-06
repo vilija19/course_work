@@ -15,11 +15,25 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $data = array();
-        $data['transactions'] = Transaction::orderBy('created_at','DESC')->paginate(config('app.items_per_page'));
+        $query = Transaction::query();
+        $data['wallet_id_filter'] = null;
+        if ($request->has('wallet')) {
+            $query->where('wallet_id', (int)$request->get('wallet'));
+            $data['wallet_id_filter'] = (int)$request->get('wallet');
+        }
+        $data['type_filter'] = null;
+        if ($request->has('type')) {
+            $query->where('type', (int)$request->get('type'));
+            $data['type_filter'] = (int)$request->get('type');
+        }
+        $query->orderBy('created_at','DESC');
+        $data['transactions'] = $query->paginate(config('app.items_per_page'));
+
         $data['currencies'] = Currency::all();
+        $data['wallets'] = Wallet::all();
         $data['default_currency_code'] = Currency::find(Auth::user()->default_currency_id)->code ;
         return view('account.transactions-info', $data);
     }

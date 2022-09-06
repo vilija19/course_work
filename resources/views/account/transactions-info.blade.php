@@ -6,7 +6,35 @@
     </x-slot>
 
     <div class="py-4">
+        <div class="max-w-7xl mx-auto sm:px-6 py-4 lg:px-8">
+            <form class="row" action="{{route('account.transactions.index')}}">
+                <div class="col col-lg-2">
+                    <label class="form-label">{{__('Filter by Wallet')}}</label>
+                    <select class="form-select" name="wallet" aria-label="Default select example">
+                        <option value="" disabled selected hidden>Select wallet</option>
+                        @foreach ( $wallets as  $id => $wallet)
+                            <option value="{{$id}}" @if($wallet_id_filter === $id) selected @endif>{{$wallet->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col col-lg-3">
+                    <label class="form-label">{{__('Filter by Type')}}</label>
+                    <select class="form-select" name="type" aria-label="Default select example">
+                        <option value="" disabled selected hidden>Select operation type</option>
+                        @foreach ( config('app.transaction_types') as  $type_id => $type)
+                            <option value="{{$type_id}}" @if($type_filter === $type_id) selected @endif>{{$type}}</option>
+                        @endforeach
+                    </select>
+                </div> 
+                <div class="col col-lg-1 position-relative">
+                    <button type="submit" class="btn btn-primary position-absolute bottom-0 start-0">Filter</button>
+                    <a class="btn btn-warning position-absolute bottom-0 start-100" href="{{route('account.transactions.index')}}" role="button">
+                        {{__('Reset')}}
+                    </a>
+                </div>               
+            </form>
 
+        </div>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
         <table class="table">
