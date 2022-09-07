@@ -31,7 +31,10 @@
                     <a class="btn btn-warning position-absolute bottom-0 end-0" href="{{route('account.transactions.index')}}" role="button">
                         {{__('Reset')}}
                     </a>
-                </div>               
+                </div>
+                @foreach ($url['sort'] as $key => $value)
+                    <input type="hidden" name="{{$key}}" value="{{$value}}">
+                @endforeach               
             </form>
         </div>
         <div class="max-w-7xl mx-auto  sm:px-6 py-4 lg:px-8">
@@ -57,6 +60,9 @@
                 <div class="col col-lg-2 position-relative">
                     <button type="submit" class="btn btn-primary position-absolute bottom-0 start-0">Sort</button>
                 </div> 
+                @foreach ($url['filter'] as $key => $value)
+                    <input type="hidden" name="{{$key}}" value="{{$value}}">
+                @endforeach                 
             </form>
         </div>
 

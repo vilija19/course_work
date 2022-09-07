@@ -18,7 +18,18 @@ class TransactionController extends Controller
     public function index(Request $request)
     {
         $data = array();
-
+        /**
+         * @var array $url
+         * Keeps get parameters for sorting and filtering
+         */
+        $url = array(
+            'filter' => array(),
+            'sort' => array()
+        );
+        /**
+         * @var array $data['sorts']
+         * Keeps columns permitted for sorting
+         */
         $data['sorts'] = array(
             'id' => 'ID',
             'wallet_id' => 'Wallet',
@@ -27,25 +38,39 @@ class TransactionController extends Controller
             'description' => 'Description',
             'created_at' => 'Date',
         );
+        /**
+         * @var array $data['orders']
+         * Keeps orders permitted for sorting
+         */
         $data['orders'] = array(
             'ASC' => 'Ascending',
             'DESC' => 'Descending',
         );
+
+        /**
+         * Constructing query with sorting, filtering and pagination
+         * Start
+         */
         $query = Transaction::query();
         $data['wallet_id_filter'] = null;
         if ($request->has('wallet')) {
             $query->where('wallet_id', (int)$request->get('wallet'));
+
             $data['wallet_id_filter'] = (int)$request->get('wallet');
+            $url['filter']['wallet'] = $data['wallet_id_filter'];
         }
         $data['type_filter'] = null;
         if ($request->has('type')) {
             $query->where('type', (int)$request->get('type'));
+
             $data['type_filter'] = (int)$request->get('type');
+            $url['filter']['type'] = $data['type_filter'];
         }
 
         $data['sort_id_filter'] = null;
         if ($request->has('sort')) {
             $data['sort_id_filter'] = $request->get('sort');
+            $url['sort']['sort'] = $data['sort_id_filter'];
         }else {
             $data['sort_id_filter'] = 'created_at';
         }
@@ -53,13 +78,20 @@ class TransactionController extends Controller
         $data['order_id_filter'] = null;
         if ($request->has('order')) {
             $data['order_id_filter'] = $request->get('order');
+            $url['sort']['order'] = $data['order_id_filter'];
+
         }else {
             $data['order_id_filter'] = 'DESC';
         }
 
         $query->orderBy($data['sort_id_filter'],$data['order_id_filter']);
-
         $data['transactions'] = $query->paginate(config('app.items_per_page'));
+        /**
+         * Constructing query with sorting, filtering and pagination
+         * End
+         */
+
+        $data['url'] = $url;
 
         $data['currencies'] = Currency::all();
         $data['wallets'] = Wallet::all();
@@ -80,7 +112,7 @@ class TransactionController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created transaction in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -123,7 +155,7 @@ class TransactionController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified transaction.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -136,7 +168,7 @@ class TransactionController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified transaction in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -159,7 +191,7 @@ class TransactionController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified transaction from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
