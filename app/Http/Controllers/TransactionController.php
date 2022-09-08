@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -104,11 +105,15 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $data = array();
         $data['wallets'] = Wallet::all();
-        return view('account.transaction-create', $data);
+        if ($request->has('internal')) {
+            return view('account.transaction-internal-create', $data);
+        }else {
+            return view('account.transaction-create', $data);
+        }
     }
 
     /**
@@ -142,6 +147,52 @@ class TransactionController extends Controller
 
         return redirect()->route('account.transactions.index')->with('message', 'Transaction created successfully');
     }
+
+    /**
+     * Store a newly created internal transaction in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeInternal(Request $request)
+    {
+        $request->validate([
+            'wallet_id_from' => 'required|int|max:25|different:wallet_id_to',
+            'wallet_id_to' => 'required|int|max:25',
+            'description' => 'string|max:55|nullable',
+        ]);
+
+        $walletFrom = Wallet::find($request->wallet_id_from);
+        $walletTo = Wallet::find($request->wallet_id_to);
+
+        $request->validate([
+            'amount' => 'required|numeric|min:1|max:'.$walletFrom->getBalance()
+        ]);
+
+        DB::transaction(function () use ($request, $walletFrom, $walletTo) {
+            /**
+             * First part of transaction. Withdraw from wallet source wallet
+             */
+            $transaction = new Transaction();
+            $transaction->type = 0;
+            $transaction->amount = $request->amount;
+            $transaction->wallet_id = $walletFrom->id;
+            $transaction->description = $request->description;
+            $transaction->save();
+
+            /**
+             * Second part of transaction. Deposit to wallet destination wallet
+             */
+            $transaction = new Transaction();
+            $transaction->type = 1;
+            $transaction->amount = Currency::convertCurrency($request->amount, $walletFrom->currency_id, $walletTo->currency_id);
+            $transaction->wallet_id = $walletTo->id;
+            $transaction->description = $request->description;
+            $transaction->save();  
+        });
+      
+        return redirect()->route('account.transactions.index')->with('message', 'Internal transaction created successfully');
+    }    
 
     /**
      * Display the specified resource.

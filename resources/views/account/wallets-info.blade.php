@@ -25,7 +25,7 @@
                 <th scope="row">{{ $wallet->id }}</th>
                 <td>{{ $wallet->name }}</td>
                 <td>{{ $wallet->currency->name  }}</td>
-                <td>{{ $wallet->balance }}</td>
+                <td>{{ $wallet->getBalance() }}</td>
                 <td>
                     <div>
                         <div style="float: left;margin-left: 5px;">

@@ -37,9 +37,20 @@ class Currency extends Model
      */
     static function convert2BaseCurrency($amount, $from)
     {
+        $to = Auth::user()->default_currency_id ?? Currency::where('value', '1')->first()->id;
+        return self::convertCurrency($amount, $from, $to);
+    }
+    /**
+     * Method converts amount from one currency to other currency
+     * @var  float $amount amount to convert
+     * @var  int $currency_id currency id to convert from
+     * @var  int $currency_id currency id to convert to
+     * @return float converted amount
+     */
+    static function convertCurrency($amount, $from, $to)
+    {
         $from = Currency::find($from);
-        $to = Currency::find(Auth::user()->default_currency_id ?? Currency::where('value', '1')->first()->id);
+        $to = Currency::find($to);
         return $amount * $from->value / $to->value;
     }
-
 }

@@ -10,5 +10,6 @@ Route::middleware('auth','verified')->group(function () {
         Route::resource('user', UserController::class);
         Route::resource('wallets', WalletController::class);
         Route::resource('transactions', TransactionController::class);
+        Route::post('transactions-internal', [TransactionController::class, 'storeInternal'])->name('transactions.storeinternal');
     });
 });

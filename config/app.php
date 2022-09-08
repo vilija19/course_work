@@ -237,4 +237,5 @@ return [
         '1' => 'Deposit'
     ],
     'items_per_page' => 4,
+    'currency_refresh_interval' => 20,
 ];

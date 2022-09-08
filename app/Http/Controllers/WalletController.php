@@ -21,7 +21,7 @@ class WalletController extends Controller
         $data = array();
         $user = Auth::user();
         $data['wallets'] = $user->wallets;
-        $test = $this->getExcangeRates($user->default_currency_id);
+        $this->refreshExcangeRates($user->default_currency_id);
         return view('account.wallets-info', $data);
     }
 
@@ -127,11 +127,14 @@ class WalletController extends Controller
     }
 
     /**
-     * Method gets currencies exchange rates for base currency from https://apilayer.com/ and stores them in database
+     * Method gets currencies exchange rates for base currency ($currency_id) from https://apilayer.com/ and stores them in database
      * use GUZZLE|GuzzleHttp\Client;
      */
-    private function getExcangeRates($currency_id)
+    private function refreshExcangeRates($currency_id)
     {
+        if ($this->isFresh()) {
+           return;
+        }
         $baseCurrency = Currency::find($currency_id);
         $baseCurrency->value = 1;
         $baseCurrency->save();
@@ -168,6 +171,19 @@ class WalletController extends Controller
                 $currency->save();
             }
         }
+    }
+    /**
+     * Method checks if currencies exchange rates are fresh
+     * @return bool
+     */
+    private function isFresh()
+    {   
+        $isFresh = false;
+        $currencyInfo = Currency::where('updated_at','>',now()->subminutes(config('app.currency_refresh_interval')))->first();
+        if ($currencyInfo) {
+            $isFresh = true;
+        }
+        return $isFresh;
     }
 
 }

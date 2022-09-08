@@ -111,7 +111,7 @@
         @endif
 
         <a class="btn btn-primary" href="{{route('account.transactions.create')}}" role="button">Create new Transaction</a>                               
-
+        <a class="btn btn-info" href="{{route('account.transactions.create',['internal' => 1])}}" role="button">Create new Internal Transaction</a>                               
         </div>
 
 

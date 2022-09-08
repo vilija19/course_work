@@ -21,7 +21,7 @@ class CreateTransactionsTable extends Migration
          * @param  bigint  $id
          * @param  bigint  $wallet_id
          * @param  tynyint  $type
-         * @param  bigint  $amount
+         * @param  float  $amount
          * @param  string  $description
          * @param  date  $created_at
          * @param  date  $updated_at
@@ -30,8 +30,8 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->bigInteger('wallet_id')->unsigned();
             $table->tinyInteger('type');
-            $table->bigInteger('amount')->unsigned();
-            $table->string('description');
+            $table->decimal('amount', 10, 2)->unsigned();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }
