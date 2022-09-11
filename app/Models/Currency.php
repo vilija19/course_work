@@ -51,6 +51,6 @@ class Currency extends Model
     {
         $from = Currency::find($from);
         $to = Currency::find($to);
-        return $amount * $from->value / $to->value;
+        return $amount * $to->value / $from->value;
     }
 }

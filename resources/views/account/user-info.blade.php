@@ -48,7 +48,7 @@
                     <th scope="row">{{ $wallet->id }}</th>
                     <td>{{ $wallet->name }}</td>
                     <td>{{ $wallet->currency->name  }}</td>
-                    <td>{{ $wallet->getBalance() }}</td>
+                    <td>{{ $wallet->getBalance() }} {{ $wallet->currency->code  }}</td>
                     </tr>
                     @endforeach                 
                 </tbody>
