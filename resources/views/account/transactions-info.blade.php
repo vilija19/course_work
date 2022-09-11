@@ -13,7 +13,7 @@
                     <select class="form-select" name="wallet" aria-label="Default select example">
                         <option value="" disabled selected hidden>Select wallet</option>
                         @foreach ( $wallets as  $id => $wallet)
-                            <option value="{{$id}}" @if($wallet_id_filter === $id) selected @endif>{{$wallet->name}}</option>
+                            <option value="{{$wallet->id}}" @if($wallet_id_filter === $wallet->id) selected @endif>{{$wallet->name}}</option>
                         @endforeach
                     </select>
                 </div>
